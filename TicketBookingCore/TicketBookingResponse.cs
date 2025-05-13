@@ -10,7 +10,13 @@
         /// <summary>
         /// När "Lyckades" är falskt, visas felmeddelandet (e.g. "Invalid email address.").
         /// </summary>
-        public string ErrorMessage { get; set; }
+
+        // Förhindra CS8618: inga nullvärden i felmeddelandet
+        public string ErrorMessage { get; set; } = string.Empty;
 
     }
 }
+
+
+
+
