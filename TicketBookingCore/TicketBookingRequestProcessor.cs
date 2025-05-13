@@ -1,4 +1,5 @@
-﻿
+﻿using System;
+
 namespace TicketBookingCore
 {
     public class TicketBookingRequestProcessor
@@ -17,10 +18,43 @@ namespace TicketBookingCore
                 throw new ArgumentNullException(nameof(request));
             }
 
-            _ticketBookingRepository.Save(Create<TicketBooking>(request));
 
+            //-----------Steg 2: Validera e-postformatet-----------//
+            /// Denna fanns i filen TicketBookingRequestProcessor.cs som kom med labbinstruktionerna.
+            if (!IsValidEmail(request.Email))
+            {
+                return new TicketBookingResponse
+                {
+                    Success = false,
+                    ErrorMessage = "Invalid email address."
+                };
+            }
+
+
+            //----------Om giltigt, fortsätt som tidigare----------//
+            _ticketBookingRepository.Save(Create<TicketBooking>(request));
             return Create<TicketBookingResponse>(request);
         }
+
+
+        /// <summary>
+        /// Denna hjälpare fanns i filen TicketBookingRequestProcessor.cs som kom med labbinstruktionerna.
+        /// Returnerar true om strängen är en giltig e-postadress, annars false.
+        /// </summary>
+        private bool IsValidEmail(string email)
+        {
+            try
+            {
+                var addr = new System.Net.Mail.MailAddress(email);
+                return addr.Address == email;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+
         /// <summary>
         /// This method creates a new instance of the specified type 
         /// and sets the properties from the request object.
