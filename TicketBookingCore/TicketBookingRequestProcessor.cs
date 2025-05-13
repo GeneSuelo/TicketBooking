@@ -1,4 +1,5 @@
 ﻿using System;
+using TicketBookingCore.Validation;  // hämta den nya validatorn
 
 namespace TicketBookingCore
 {
@@ -22,7 +23,7 @@ namespace TicketBookingCore
             //-----------Steg 2: Validera e-postformatet-----------//
             /// Denna fanns i filen TicketBookingRequestProcessor.cs som kom med labbinstruktionerna.
             /// Validation error path:
-            if (!IsValidEmail(request.Email))
+            if (!EmailValidator.IsValid(request.Email)) // Ersätt det inline helper call
             {
                 return new TicketBookingResponse
                 {
@@ -42,25 +43,9 @@ namespace TicketBookingCore
             return response;
         }
 
+        // NOTE: private IsValidEmail har tagits bort
 
-        /// <summary>
-        /// Denna hjälpare fanns i filen TicketBookingRequestProcessor.cs som kom med labbinstruktionerna.
-        /// Returnerar true om strängen är en giltig e-postadress, annars false.
-        /// </summary>
-        private bool IsValidEmail(string email)
-        {
-            try
-            {
-                var addr = new System.Net.Mail.MailAddress(email);
-                return addr.Address == email;
-            }
-            catch
-            {
-                return false;
-            }
-        }
-
-
+  
         /// <summary>
         /// This method creates a new instance of the specified type 
         /// and sets the properties from the request object.
