@@ -21,6 +21,7 @@ namespace TicketBookingCore
 
             //-----------Steg 2: Validera e-postformatet-----------//
             /// Denna fanns i filen TicketBookingRequestProcessor.cs som kom med labbinstruktionerna.
+            /// Validation error path:
             if (!IsValidEmail(request.Email))
             {
                 return new TicketBookingResponse
@@ -32,8 +33,13 @@ namespace TicketBookingCore
 
 
             //----------Om giltigt, fortsätt som tidigare----------//
+            // Spara bokning
             _ticketBookingRepository.Save(Create<TicketBooking>(request));
-            return Create<TicketBookingResponse>(request);
+
+            // Skapa och returnera ett lyckat svar
+            var response = Create<TicketBookingResponse>(request);
+            response.Success = true;
+            return response;
         }
 
 
